@@ -1,55 +1,45 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class VentanaBienvenida {
-        public static void main(String[] args) {
-            VentanaBienvenida ventanaBienvenida = new VentanaBienvenida();
-        }
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Bienvenido");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    public VentanaBienvenida() {
-        JFrame frame = new JFrame("Bienvenido");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JButton botonRegistroEstudiante = new JButton("Registro Estudiante");
+            JButton botonBusquedaEstudiante = new JButton("Búsqueda Estudiante");
+            JButton botonRegistroCarrera = new JButton("Registro Carrera");
+            JButton botonSalir = new JButton("Salir");
 
-        JButton botonRegistroEstudiante = new JButton("Registro Estudiante");
-        JButton botonBusquedaEstudiante = new JButton("Búsqueda Estudiante");
-        JButton botonRegistroCarrera = new JButton("Registro Carrera");
-
-        botonRegistroEstudiante.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            botonRegistroEstudiante.addActionListener(e -> {
                 frame.dispose();
                 VentanaRegistroEstudiante ventanaRegistroEstudiante = new VentanaRegistroEstudiante();
-            }
-        });
+            });
 
-        botonBusquedaEstudiante.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            botonBusquedaEstudiante.addActionListener(e -> {
                 frame.dispose(); // Cerrar la ventana actual
                 VentanaBusquedaEstudiante ventanaBusquedaEstudiante = new VentanaBusquedaEstudiante();
-            }
-        });
+            });
 
-        botonRegistroCarrera.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            botonRegistroCarrera.addActionListener(e -> {
                 frame.dispose();
-                VentanaRegristroCarrera ventanaRegistroCarrera = new VentanaRegristroCarrera();
-            }
+                VentanaRegistroCarrera ventanaRegistroCarrera = new VentanaRegistroCarrera();
+            });
+
+            botonSalir.addActionListener(e -> System.exit(0));
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+            panel.add(botonRegistroEstudiante);
+            panel.add(botonBusquedaEstudiante);
+            panel.add(botonRegistroCarrera);
+            panel.add(botonSalir);
+
+            frame.getContentPane().add(panel);
+            frame.pack();
+            frame.setVisible(true);
         });
-
-        JPanel panel = new JPanel();
-        panel.add(botonRegistroEstudiante);
-        panel.add(botonBusquedaEstudiante);
-        panel.add(botonRegistroCarrera);
-
-        frame.getContentPane().add(panel);
-        frame.pack();
-        frame.setVisible(true);
     }
 }
-
-
