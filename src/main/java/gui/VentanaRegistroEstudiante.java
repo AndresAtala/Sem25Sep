@@ -29,7 +29,6 @@ public class VentanaRegistroEstudiante {
                 String apellido = apellidoField.getText();
                 String rut = rutField.getText();
                 int matricula = Integer.parseInt(matriculaField.getText());
-                // Aquí puedes agregar la lógica para registrar al estudiante
             });
 
             JButton volverButton = new JButton("Volver");

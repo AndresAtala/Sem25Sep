@@ -1,9 +1,13 @@
 package gui;
-
+import Package.CarreraController;
 import javax.swing.*;
-
+import org.jooq.DSLContext;
 public class VentanaRegistroCarrera {
+    private CarreraController carreraController;
+    private DSLContext query;
+
     public VentanaRegistroCarrera() {
+        this.carreraController = new CarreraController(query);
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Registro Carrera");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,7 +29,6 @@ public class VentanaRegistroCarrera {
                 String nombre = nombreField.getText();
                 String codigo = codigoField.getText();
                 int semestres = Integer.parseInt(semestresField.getText());
-                // Aquí puedes agregar la lógica para registrar la carrera
             });
 
             JButton volverButton = new JButton("Volver");

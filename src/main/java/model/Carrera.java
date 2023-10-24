@@ -22,7 +22,7 @@ public class Carrera {
         this.estudiantes = new ArrayList<>();
     }
 
-    // Getters and setters
+
     public String getNombre() {
         return nombre;
     }
@@ -55,12 +55,31 @@ public class Carrera {
         this.estudiantes = estudiantes;
     }
 
-    // Métodos de gestión de estudiantes
+
     public void agregarEstudiante(Estudiante estudiante) {
         this.estudiantes.add(estudiante);
     }
 
     public void eliminarEstudiante(Estudiante estudiante) {
         this.estudiantes.remove(estudiante);
+    }
+
+    public Estudiante buscarEstudiantePorRut(String rut) {
+        for (Estudiante estudiante : estudiantes) {
+            if (estudiante.getRut().equals(rut)) {
+                return estudiante;
+            }
+        }
+        return null;
+    }
+
+    public void modificarEstudiante(String rut, Estudiante estudianteModificado) {
+        for (int i = 0; i < estudiantes.size(); i++) {
+            Estudiante estudiante = estudiantes.get(i);
+            if (estudiante.getRut().equals(rut)) {
+                estudiantes.set(i, estudianteModificado);
+                break;
+            }
+        }
     }
 }

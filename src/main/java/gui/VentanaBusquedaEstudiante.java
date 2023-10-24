@@ -17,7 +17,6 @@ public class VentanaBusquedaEstudiante {
             JButton buscarButton = new JButton("Buscar");
             buscarButton.addActionListener(e -> {
                 String busqueda = buscarField.getText();
-                // Aquí puedes agregar la lógica para buscar al estudiante
             });
 
             JButton volverButton = new JButton("Volver");
