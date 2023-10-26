@@ -20,8 +20,8 @@ public class CafeController {
         this.query = query;
     }
 
-    public String[] obtenerNombresCafes() {
-        return cafeDao.obtenerNombresCafes(query);
+    public String[] obtenerNombresCafes(DSLContext query) {
+        return cafeDao.obtenerNombresCafes(this.query);
     }
 
     public void agregarCafe(String nombre, int cantidadGramosCafe, int mililitrosAgua, String tamaño, boolean crema, boolean leche, boolean chocolate, boolean discontinuado) {

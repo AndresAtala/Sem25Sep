@@ -40,7 +40,7 @@ public class DBGenerator {
         return DSL.using(connection);
     }
 
-    private static void crearTablaCafe(DSLContext create) {
+    private static void crearTablaCafe(DSLContext create) { //para mañana cambiar esto//
         create.createTableIfNotExists("Cafe")
                 .column("nombre", VARCHAR(100))
                 .column("cantidad_gramos_cafe", INTEGER)
@@ -53,7 +53,7 @@ public class DBGenerator {
                 .execute();
     }
 
-    private static void crearTablaCafeteria(DSLContext create) {
+    private static void crearTablaCafeteria(DSLContext create) { // esto tambien//
         create.createTableIfNotExists("Cafeteria")
                 .column("nombre", VARCHAR(100))
                 .column("direccion", VARCHAR(100))

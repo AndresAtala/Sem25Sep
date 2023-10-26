@@ -1,6 +1,6 @@
 package gui;
 
-import Package.CafeteriaController;
+import Package.CafeController;
 import model.data.DBConnector;
 import model.data.DBGenerator;
 import org.jooq.DSLContext;
@@ -9,18 +9,13 @@ import javax.swing.*;
 
 public class VentanaBienvenida {
     public static void main(String[] args) {
-        // Configuración de la base de datos
-        String nombreBD = "BD"; // Reemplaza con el nombre de tu base de datos
-        String usuario = "root"; // Reemplaza con tu nombre de usuario
-        String password = ""; // Reemplaza con tu contraseña
-
-        // Establecer la conexión a la base de datos
+        String nombreBD = "BD";
+        String usuario = "root";
+        String password = "";
         DSLContext query = DBConnector.createDSLContext(nombreBD, usuario, password);
-
-        // Iniciar la base de datos y generar las tablas
         DBGenerator.iniciarBD(nombreBD);
 
-        CafeteriaController cafeteriaController = new CafeteriaController(query);
+        CafeController cafeController = new CafeController(query);
 
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Bienvenido a la Cafetería");
@@ -30,7 +25,7 @@ public class VentanaBienvenida {
             JButton botonSalir = new JButton("Salir");
 
             botonIngresarCafeteria.addActionListener(e -> {
-                VentanaCafeteria ventanaCafeteria = new VentanaCafeteria(cafeteriaController);
+                VentanaCafeteria ventanaCafeteria = new VentanaCafeteria(cafeController, query);
                 ventanaCafeteria.mostrar();
             });
 

@@ -1,17 +1,20 @@
 package gui;
 
-import Package.CafeteriaController;
+import Package.CafeController;
 import model.Cafe;
+import org.jooq.DSLContext;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class VentanaCafeteria {
-    private final CafeteriaController cafeteriaController;
+    private final CafeController cafeController;
+    private final DSLContext query;
     private final JFrame frame;
 
-    public VentanaCafeteria(CafeteriaController cafeteriaController) {
-        this.cafeteriaController = cafeteriaController;
+    public VentanaCafeteria(CafeController cafeController, DSLContext query) {
+        this.cafeController = cafeController;
+        this.query = query;
 
         frame = new JFrame("Cafetería");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -19,7 +22,7 @@ public class VentanaCafeteria {
         frame.setLayout(new FlowLayout());
 
         JLabel label = new JLabel("Opciones de café:");
-        String[] opciones = cafeteriaController.obtenerNombresCafeterias();
+        String[] opciones = cafeController.obtenerNombresCafes(query);
         JComboBox<String> comboBox = new JComboBox<>(opciones);
 
         JButton botonPedirCafe = new JButton("Pedir Café");
@@ -29,7 +32,7 @@ public class VentanaCafeteria {
 
         botonPedirCafe.addActionListener(e -> {
             String selectedCafe = (String) comboBox.getSelectedItem();
-            Cafe cafe = cafeteriaController.buscarCafe(selectedCafe);
+            Cafe cafe = cafeController.buscarCafe(selectedCafe);
             if (cafe != null && !cafe.isDiscontinuado()) {
                 JOptionPane.showMessageDialog(null, "Café pedido: " + selectedCafe);
             } else {
@@ -39,7 +42,7 @@ public class VentanaCafeteria {
 
         botonAgregarLeche.addActionListener(e -> {
             String selectedCafe = (String) comboBox.getSelectedItem();
-            Cafe cafe = cafeteriaController.buscarCafe(selectedCafe);
+            Cafe cafe = cafeController.buscarCafe(selectedCafe);
             if (cafe != null && !cafe.isDiscontinuado()) {
                 JOptionPane.showMessageDialog(null, "Leche agregada a: " + selectedCafe);
             } else {
@@ -49,9 +52,9 @@ public class VentanaCafeteria {
 
         botonDescontinuarCafe.addActionListener(e -> {
             String selectedCafe = (String) comboBox.getSelectedItem();
-            Cafe cafe = cafeteriaController.buscarCafe(selectedCafe);
+            Cafe cafe = cafeController.buscarCafe(selectedCafe);
             if (cafe != null) {
-                cafeteriaController.descontinuarCafe(selectedCafe);
+                cafeController.descontinuarCafe(selectedCafe);
                 JOptionPane.showMessageDialog(null, "Café descontinuado: " + selectedCafe);
             } else {
                 JOptionPane.showMessageDialog(null, "El café seleccionado no existe.");
