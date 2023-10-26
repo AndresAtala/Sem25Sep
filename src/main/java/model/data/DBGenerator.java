@@ -1,65 +1,71 @@
 package model.data;
+
 import org.jooq.DSLContext;
-import org.jooq.DataType;
 import org.jooq.impl.DSL;
+
 import java.sql.Connection;
-import static org.jooq.impl.DSL.*;
-import static org.jooq.impl.SQLDataType.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import static org.jooq.impl.DSL.foreignKey;
+import static org.jooq.impl.DSL.primaryKey;
+import static org.jooq.impl.SQLDataType.INTEGER;
+import static org.jooq.impl.SQLDataType.VARCHAR;
+
 public class DBGenerator {
-    public static void iniciarBD(String nombreBD) throws ClassNotFoundException {
-        Connection connection = DBConnector.connection("root","");
-        DSLContext create = DSL.using(connection);
-        crearBaseDato(create,nombreBD);
-        create = actualizarConexion(connection,nombreBD);
-        crearTablaCarrera(create);
-        crearTablaEstudiante(create);
-        relacionarTabla(create,"Estudiante","codigo_carrera","Carrera");
-        DBConnector.closeConnection();
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "";
+
+    public static void iniciarBD(String nombreBD) {
+        DSLContext create = DBConnector.createDSLContext("", USERNAME, PASSWORD);
+        crearBaseDato(create, nombreBD);
+        create = DBConnector.createDSLContext(nombreBD, USERNAME, PASSWORD);
+        crearTablaCafe(create);
+        crearTablaCafeteria(create);
     }
-    public static DSLContext conectarBD(String nombre) throws ClassNotFoundException {
-        Connection connection = DBConnector.connection(nombre,"root","");
-        DSLContext create = DSL.using(connection);
-        return create;
+
+    private static Connection conectarBaseDatos() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/";
+        return DriverManager.getConnection(url, USERNAME, PASSWORD);
     }
-    private static void crearBaseDato(DSLContext create, String nombreBD){
+
+    private static void crearBaseDato(DSLContext create, String nombreBD) {
         create.createDatabaseIfNotExists(nombreBD).execute();
     }
-    private static DSLContext actualizarConexion(Connection connection,String nombreBD){
-        DBConnector.closeConnection();
-        connection= DBConnector.connection(nombreBD,"root","");
-        DSLContext create=DSL.using(connection);
-        return create;
-    }
-    private static void crearTablaCarrera(DSLContext create){
-        create.createTableIfNotExists("Carrera").column("nombre_carrera",VARCHAR(100))
-                .column("codigo",VARCHAR(50))
-                .column("cantidad_semestres",INTEGER)
-                .constraint(primaryKey("codigo")).execute();
-    }
-    private static void crearTablaEstudiante(DSLContext create){
-        create.createTableIfNotExists("Estudiante").column("rut",VARCHAR(50))
-                .column("nombre",VARCHAR(100))
-                .column("matricula",VARCHAR(50))
-                .column("codigo_carrera",VARCHAR(50))
-                .constraint(primaryKey("rut")).execute();
-    }
-    private static void relacionarTabla(DSLContext create, String nombreTabla, String claveForanea, String
-            nombreTablaRelacion){
-        create.alterTableIfExists(nombreTabla).alterConstraint(foreignKey(claveForanea).references(nombreTablaRelacion)).enforced();
-    }
-    private static void agregarColumnaTabla(DSLContext create, String nombreTabla, String columna, DataType
-            tipoColumna){
-        create.alterTableIfExists(nombreTabla).addColumn(columna,tipoColumna);
+
+    private static DSLContext actualizarConexion(Connection connection, String nombreBD) throws SQLException {
+        DBConnector.closeConnection(connection);
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + nombreBD, USERNAME, PASSWORD);
+        return DSL.using(connection);
     }
 
-
-    public static void main(String[] args) {
-        String nombreBD = "BD";
-        try {
-            iniciarBD(nombreBD);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+    private static void crearTablaCafe(DSLContext create) {
+        create.createTableIfNotExists("Cafe")
+                .column("nombre", VARCHAR(100))
+                .column("cantidad_gramos_cafe", INTEGER)
+                .column("mililitros_agua", INTEGER)
+                .column("tamaño", VARCHAR(50))
+                .column("crema", INTEGER)
+                .column("leche", INTEGER)
+                .column("chocolate", INTEGER)
+                .constraint(primaryKey("nombre"))
+                .execute();
     }
 
+    private static void crearTablaCafeteria(DSLContext create) {
+        create.createTableIfNotExists("Cafeteria")
+                .column("nombre", VARCHAR(100))
+                .column("direccion", VARCHAR(100))
+                .column("redes_sociales", VARCHAR(100))
+                .constraint(primaryKey("nombre"))
+                .execute();
+    }
+
+    private static void relacionarTabla(DSLContext create, String nombreTabla, String claveForanea, String nombreTablaRelacion) {
+        create.alterTableIfExists(nombreTabla)
+                .alterConstraint(foreignKey(claveForanea)
+                        .references(nombreTablaRelacion))
+                .enforced();
+    }
 }
